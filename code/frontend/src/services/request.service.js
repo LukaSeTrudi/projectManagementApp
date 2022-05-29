@@ -51,6 +51,8 @@ export default {
       if(error && error.response && error.response.status == 401) {
         tokenService.clearToken();
         Store.dispatch("auth/logout");
+      } else if(error && error.response && error.response.status == 403) {
+        window.location.href = "/";
       }
       throw error;
     })

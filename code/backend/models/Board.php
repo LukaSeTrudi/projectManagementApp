@@ -1,9 +1,25 @@
 <?php 
 include_once 'DBInit.php';
 include_once 'List.php';
+include_once 'Workspace.php';
+
 class Board {
   
+  public static function hasAccess($userId, $boardId) {
+    $db = DBInit::getInstance();
+    $statement = $db->prepare("SELECT COUNT(*) FROM members WHERE user_id = :user_id AND workspace_id IN (SELECT workspace_id FROM boards WHERE id = :board_id)");
+    $statement->bindParam(":user_id", $userId);
+    $statement->bindParam(":board_id", $boardId);
+    $statement->execute();
+    $count = $statement->fetchColumn();
+    return $count > 0;
+  }
+
   public static function get($boardId, $user_id) {
+    if(!Board::hasAccess($user_id, $boardId)) {
+      http_response_code(403);
+      exit;
+    }
     $db = DBInit::getInstance();
     $stmt = $db->prepare("SELECT * FROM boards WHERE id = :boardId");
     $stmt->bindParam(":boardId", $boardId);
@@ -17,6 +33,10 @@ class Board {
   }
 
   public static function getByWorkspaceId($workspaceId, $user_id) {
+    if(!Workspace::hasAccess($user_id, $workspaceId)) {
+      http_response_code(403);
+      exit;
+    }
     $db = DBInit::getInstance();
     $stmt = $db->prepare("SELECT * FROM boards WHERE workspace_id = :workspaceId");
     $stmt->bindParam(":workspaceId", $workspaceId);

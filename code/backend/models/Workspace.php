@@ -4,6 +4,16 @@ include_once 'Board.php';
 include_once 'Card.php';
 class Workspace {
 
+  public static function hasAccess($userId, $workspaceId) {
+    $db = DBInit::getInstance();
+    $statement = $db->prepare("SELECT COUNT(*) FROM members WHERE user_id = :user_id AND workspace_id = :workspace_id");
+    $statement->bindParam(":user_id", $userId);
+    $statement->bindParam(":workspace_id", $workspaceId);
+    $statement->execute();
+    $count = $statement->fetchColumn();
+    return $count > 0;
+  }
+
   public static function getAll($userId) {
     $db = DBInit::getInstance();
     $statement = $db->prepare("SELECT workspaces.id as id, workspaces.name as name, workspaces.owner_id as owner_id, workspaces.description as description, m.role_id as role_id FROM workspaces INNER JOIN members m ON m.workspace_id = workspaces.id WHERE m.user_id = :id");
@@ -20,6 +30,10 @@ class Workspace {
   }
 
   public static function get($workspaceId, $userId) {
+    if(!Workspace::hasAccess($userId, $workspaceId)) {
+      http_response_code(403);
+      exit;
+    }
     $db = DBInit::getInstance();
     $statement = $db->prepare("SELECT * FROM workspaces WHERE id = :id");
     $statement->bindParam(":id", $workspaceId, PDO::PARAM_INT);

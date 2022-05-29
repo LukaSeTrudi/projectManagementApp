@@ -68,7 +68,7 @@ export default {
       cardTitleRules: [
         (v) => !!v || "Card title is required",
         (v) =>
-          (v && v.length <= 15) || "Card title must be less than 15 characters",
+          (v && v.length <= 25) || "Card title must be less than 25 characters",
       ],
 
       cardDescription: "",
