@@ -18,7 +18,7 @@
       <MenuHeader title="Workspaces" @close="menu = false"/>
 
       <v-list>
-        <span class="caption ml-4">Your workspaces</span>
+        <p class="caption ml-4">Your workspaces</p>
         <v-list-item v-for="workspace in getMyWorkspaces" :key="workspace.id" @click="goToWorkspace(workspace.id)">
           <v-list-item-content>
             <v-list-item-title>{{ workspace.name }}</v-list-item-title>
@@ -26,7 +26,7 @@
         </v-list-item>
 
         
-        <span class="caption ml-4">Guest workspaces</span>
+        <p class="caption ml-4">Guest workspaces</p>
         <v-list-item v-for="workspace in getGuestWorkspaces" :key="workspace.id" @click="goToWorkspace(workspace.id)">
           <v-list-item-content>
             <v-list-item-title>{{ workspace.name }}</v-list-item-title>

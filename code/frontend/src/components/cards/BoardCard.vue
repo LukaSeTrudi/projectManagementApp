@@ -1,5 +1,5 @@
 <template>
-  <v-sheet elevation="1" width="200" height="100" class="mr-2" style="cursor: pointer; min-width: 200px; min-height:100px;" v-bind:style="{background: board.color}" @click="clickedBoard">
+  <v-sheet elevation="1" width="200" height="100" class="mr-2" style="cursor: pointer; min-width: 200px; min-height:100px; border-radius: 5px;" v-bind:style="{background: board.color}" @click="clickedBoard">
     <div class="pa-2">
       {{board.name}}
     </div>
